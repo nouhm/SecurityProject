@@ -16,9 +16,10 @@ algorithmCtr = 0
 
 while True:
     # generate plaintext
-    plaintext = plaintextFile.read(blockSize)
+    plaintextBlock = plaintextFile.read(blockSize)
+    plaintext = b''
 
-    if plaintext == '':
+    if plaintextBlock == '':
         break
 
     elif (algorithmCtr%3 == 0):
@@ -53,10 +54,10 @@ while True:
 
     
     # check if padding is needed
-        if len(plaintext) < blockSize :
-            plaintext = pad(str.encode(plaintext), blockSize)
+        if len(plaintextBlock) < blockSize :
+            plaintext = pad(str.encode(plaintextBlock), blockSize)
         else :
-            plaintext = str.encode(plaintext)
+            plaintext = str.encode(plaintextBlock)
     
     # write key to file
     keysFile.write(key) # or key.decode("cp437")
