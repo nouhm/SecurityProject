@@ -3,7 +3,6 @@ from Crypto.Cipher import DES
 from Crypto.Cipher import Blowfish
 from Crypto.Random import get_random_bytes
 from Crypto.Util.Padding import pad
-from Crypto.Util.Padding import unpad
 # from Crypto.Cipher import 
 
 # open all files
@@ -54,10 +53,10 @@ while True:
 
     
     # check if padding is needed
-        if len(plaintextBlock) < blockSize :
-            plaintext = pad(str.encode(plaintextBlock), blockSize)
-        else :
-            plaintext = str.encode(plaintextBlock)
+    if len(plaintextBlock) < blockSize :
+        plaintext = pad(plaintextBlock.encode('UTF-8'), blockSize)
+    else :
+        plaintext = plaintextBlock.encode('UTF-8')
     
     # write key to file
     keysFile.write(key) # or key.decode("cp437")
