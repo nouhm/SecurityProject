@@ -83,3 +83,8 @@ while True:
     # increment to next algorithm
     algorithmCtr+= 1
 
+
+
+plaintextFile.close()
+keysFile.close()
+ciphertextFile.close()
