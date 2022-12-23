@@ -23,40 +23,53 @@ while True:
 
     elif (algorithmCtr%3 == 0):
         # update size to be read
-        blockSize = 16
+        blockSize = 8
 
         # generate random key 
-        key = get_random_bytes(blockSize) # key size = 16 bytes
+        key = get_random_bytes(16) # key size = 16 bytes
 
         # implement AES
         cipher = AES.new(key, AES.MODE_ECB)
+
+        # check if padding is needed
+        if len(plaintextBlock) < 16 :
+            plaintext = pad(plaintextBlock.encode('UTF-8'), 16)
+        else :
+            plaintext = plaintextBlock.encode('UTF-8')
 
     elif (algorithmCtr%3 == 1):
         # update size to be read
         blockSize = 8
 
         # generate random key 
-        key = get_random_bytes(blockSize) # key size = 8 bytes
+        key = get_random_bytes(8) # key size = 8 bytes
 
         # implement DES
         cipher = DES.new(key, DES.MODE_ECB)
 
+        # check if padding is needed
+        if len(plaintextBlock) < 8 :
+            plaintext = pad(plaintextBlock.encode('UTF-8'), 8)
+        else :
+            plaintext = plaintextBlock.encode('UTF-8')
+
     else :  
         # update size to be read
-        blockSize = 8 
+        blockSize = 16 
 
         # generate random key 
-        key = get_random_bytes(blockSize) # key size = 8 bytes
+        key = get_random_bytes(8) # key size = 8 bytes
 
         # implement blowfish
         cipher = Blowfish.new(key, Blowfish.MODE_ECB)
 
-    
-    # check if padding is needed
-    if len(plaintextBlock) < blockSize :
-        plaintext = pad(plaintextBlock.encode('UTF-8'), blockSize)
-    else :
-        plaintext = plaintextBlock.encode('UTF-8')
+        # check if padding is needed
+        if len(plaintextBlock) < 8 :
+            plaintext = pad(plaintextBlock.encode('UTF-8'), 8)
+        else :
+            plaintext = plaintextBlock.encode('UTF-8')
+
+
     
     # write key to file
     keysFile.write(key) # or key.decode("cp437")
