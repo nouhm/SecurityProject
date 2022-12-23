@@ -2,11 +2,13 @@ from Crypto.Cipher import AES
 from Crypto.Cipher import DES
 from Crypto.Cipher import Blowfish
 from Crypto.Util.Padding import unpad
+from base64 import b64decode
+
 # from Crypto.Cipher import 
 
 # open all files
 plaintextFile = open("decipheredText.txt", "w")
-keysFile = open("keys.txt", "rb")
+keysFile = open("keys.txt", "rb+")
 ciphertextFile = open("ciphertext.txt", "rb")
 
 blockSize = 16
@@ -24,7 +26,7 @@ while True:
         blockSize = 8
 
         # generate random key 
-        key =  keysFile.read(16) # key size = 16 bytes
+        key =  b64decode(keysFile.readline().replace(b'\r\n', b'')) # key size = 16 bytes
 
         # implement AES
         cipher = AES.new(key, AES.MODE_ECB)
@@ -44,7 +46,7 @@ while True:
         blockSize = 8
 
         # generate random key 
-        key =  keysFile.read(8) # key size = 8 bytes
+        key =  b64decode(keysFile.readline().replace(b'\r\n', b'')) # key size = 8 bytes
 
         # implement DES
         cipher = DES.new(key, DES.MODE_ECB)
@@ -64,7 +66,7 @@ while True:
         blockSize = 16
 
         # generate random key 
-        key =  keysFile.read(8) # key size = 8 bytes
+        key =  b64decode(keysFile.readline().replace(b'\r\n', b'')) # key size = 8 bytes
 
         # implement blowfish
         cipher = Blowfish.new(key, Blowfish.MODE_ECB)
@@ -81,8 +83,7 @@ while True:
     
 
 
-    print(algorithmCtr)
-    p = unpaddedText.decode('UTF-8')
+    p = (unpaddedText).decode('UTF-8')
     plaintextFile.write(p)
 
     # increment to next algorithm

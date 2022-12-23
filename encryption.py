@@ -3,11 +3,13 @@ from Crypto.Cipher import DES
 from Crypto.Cipher import Blowfish
 from Crypto.Random import get_random_bytes
 from Crypto.Util.Padding import pad
+from base64 import b64encode
+
 # from Crypto.Cipher import 
 
 # open all files
 plaintextFile = open("plaintext.txt", "r")
-keysFile = open("keys.txt", "wb")
+keysFile = open("keys.txt", "w")
 ciphertextFile = open("ciphertext.txt", "wb")
 
 blockSize = 16
@@ -43,7 +45,6 @@ while True:
 
         # generate random key 
         key = get_random_bytes(8) # key size = 8 bytes
-
         # implement DES
         cipher = DES.new(key, DES.MODE_ECB)
 
@@ -60,6 +61,7 @@ while True:
         # generate random key 
         key = get_random_bytes(8) # key size = 8 bytes
 
+
         # implement blowfish
         cipher = Blowfish.new(key, Blowfish.MODE_ECB)
 
@@ -72,8 +74,8 @@ while True:
 
     
     # write key to file
-    keysFile.write(key) # or key.decode("cp437")
-
+    #keysFile.write(key) # or key.decode("cp437")
+    keysFile.write(b64encode(key).decode("UTF-8")+'\n')
     # encrypt and write to file
     ciphertext = cipher.encrypt(plaintext)
     ciphertextFile.write(ciphertext)
