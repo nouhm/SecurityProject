@@ -8,8 +8,8 @@ from base64 import b64encode
 # from Crypto.Cipher import 
 
 # open all files
-plaintextFile = open("plaintext.txt", "r")
-keysFile = open("keys.txt", "w")
+plaintextFile = open("sender/plaintext.txt", "r")
+keysFile = open("sender/keys.txt", "w")
 ciphertextFile = open("ciphertext.txt", "wb")
 
 blockSize = 16

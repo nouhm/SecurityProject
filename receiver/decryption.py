@@ -8,7 +8,7 @@ from base64 import b64decode
 
 # open all files
 plaintextFile = open("decipheredText.txt", "w")
-keysFile = open("keys.txt", "rb+")
+keysFile = open("receiver/decryptedKeys.txt", "rb+")
 ciphertextFile = open("ciphertext.txt", "rb")
 
 blockSize = 16
