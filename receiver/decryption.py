@@ -7,7 +7,7 @@ from base64 import b64decode
 # from Crypto.Cipher import 
 
 # open all files
-plaintextFile = open("decipheredText.txt", "w")
+plaintextFile = open("receiver/decipheredText.txt", "w")
 keysFile = open("receiver/decryptedKeys.txt", "rb+")
 ciphertextFile = open("ciphertext.txt", "rb")
 
