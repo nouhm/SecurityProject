@@ -8,83 +8,90 @@ from base64 import b64encode
 # from Crypto.Cipher import 
 
 # open all files
-plaintextFile = open("sender/plaintext.txt", "r")
-keysFile = open("sender/keys.txt", "w")
-ciphertextFile = open("ciphertext.txt", "wb")
 
-blockSize = 16
-algorithmCtr = 0
+def encryption (ptext):
 
-while True:
-    # generate plaintext
-    plaintextBlock = plaintextFile.read(blockSize)
-    plaintext = b''
+    #plaintextFile = open("sender/plaintext.txt", "r")
+    keysFile = open("sender/keys.txt", "w")
+    ciphertextFile = open("ciphertext.txt", "wb")
 
-    if plaintextBlock == '':
-        break
+    plaintextFile = open(ptext, "r")
+    #keysFile = open(keys, "w")
+    #ciphertextFile = open(ctext, "wb")
 
-    elif (algorithmCtr%3 == 0):
-        # update size to be read
-        blockSize = 8
+    blockSize = 16
+    algorithmCtr = 0
 
-        # generate random key 
-        key = get_random_bytes(16) # key size = 16 bytes
+    while True:
+        # generate plaintext
+        plaintextBlock = plaintextFile.read(blockSize)
+        plaintext = b''
 
-        # implement AES
-        cipher = AES.new(key, AES.MODE_ECB)
+        if plaintextBlock == '':
+            break
 
-        # check if padding is needed
-        if len(plaintextBlock) < 16 :
-            plaintext = pad(plaintextBlock.encode('UTF-8'), 16)
-        else :
-            plaintext = plaintextBlock.encode('UTF-8')
+        elif (algorithmCtr%3 == 0):
+            # update size to be read
+            blockSize = 8
 
-    elif (algorithmCtr%3 == 1):
-        # update size to be read
-        blockSize = 8
+            # generate random key 
+            key = get_random_bytes(16) # key size = 16 bytes
 
-        # generate random key 
-        key = get_random_bytes(8) # key size = 8 bytes
-        # implement DES
-        cipher = DES.new(key, DES.MODE_ECB)
+            # implement AES
+            cipher = AES.new(key, AES.MODE_ECB)
 
-        # check if padding is needed
-        if len(plaintextBlock) < 8 :
-            plaintext = pad(plaintextBlock.encode('UTF-8'), 8)
-        else :
-            plaintext = plaintextBlock.encode('UTF-8')
+            # check if padding is needed
+            if len(plaintextBlock) < 16 :
+                plaintext = pad(plaintextBlock.encode('UTF-8'), 16)
+            else :
+                plaintext = plaintextBlock.encode('UTF-8')
 
-    else :  
-        # update size to be read
-        blockSize = 16 
+        elif (algorithmCtr%3 == 1):
+            # update size to be read
+            blockSize = 8
 
-        # generate random key 
-        key = get_random_bytes(8) # key size = 8 bytes
+            # generate random key 
+            key = get_random_bytes(8) # key size = 8 bytes
+            # implement DES
+            cipher = DES.new(key, DES.MODE_ECB)
 
+            # check if padding is needed
+            if len(plaintextBlock) < 8 :
+                plaintext = pad(plaintextBlock.encode('UTF-8'), 8)
+            else :
+                plaintext = plaintextBlock.encode('UTF-8')
 
-        # implement blowfish
-        cipher = Blowfish.new(key, Blowfish.MODE_ECB)
+        else :  
+            # update size to be read
+            blockSize = 16 
 
-        # check if padding is needed
-        if len(plaintextBlock) < 8 :
-            plaintext = pad(plaintextBlock.encode('UTF-8'), 8)
-        else :
-            plaintext = plaintextBlock.encode('UTF-8')
+            # generate random key 
+            key = get_random_bytes(8) # key size = 8 bytes
 
 
-    
-    # write key to file
-    #keysFile.write(key) # or key.decode("cp437")
-    keysFile.write(b64encode(key).decode("UTF-8")+'\n')
-    # encrypt and write to file
-    ciphertext = cipher.encrypt(plaintext)
-    ciphertextFile.write(ciphertext)
+            # implement blowfish
+            cipher = Blowfish.new(key, Blowfish.MODE_ECB)
 
-    # increment to next algorithm
-    algorithmCtr+= 1
+            # check if padding is needed
+            if len(plaintextBlock) < 8 :
+                plaintext = pad(plaintextBlock.encode('UTF-8'), 8)
+            else :
+                plaintext = plaintextBlock.encode('UTF-8')
 
 
+        
+        # write key to file
+        #keysFile.write(key) # or key.decode("cp437")
+        keysFile.write(b64encode(key).decode("UTF-8")+'\n')
+        # encrypt and write to file
+        ciphertext = cipher.encrypt(plaintext)
+        ciphertextFile.write(ciphertext)
 
-plaintextFile.close()
-keysFile.close()
-ciphertextFile.close()
+        # increment to next algorithm
+        algorithmCtr+= 1
+
+
+
+    plaintextFile.close()
+    keysFile.close()
+    ciphertextFile.close()

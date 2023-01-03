@@ -5,91 +5,91 @@ from Crypto.Util.Padding import unpad
 from base64 import b64decode
 
 # from Crypto.Cipher import 
+def decryption(ctext):
+    # open all files
+    plaintextFile = open("receiver/decipheredText.txt", "w")
+    keysFile = open("receiver/decryptedKeys.txt", "rb+")
+    ciphertextFile = open("ciphertext.txt", "rb")
 
-# open all files
-plaintextFile = open("receiver/decipheredText.txt", "w")
-keysFile = open("receiver/decryptedKeys.txt", "rb+")
-ciphertextFile = open("ciphertext.txt", "rb")
+    blockSize = 16
+    algorithmCtr = 0
 
-blockSize = 16
-algorithmCtr = 0
+    while True:
+        # generate ciphertext
+        ciphertextBlock = ciphertextFile.read(blockSize)
 
-while True:
-    # generate ciphertext
-    ciphertextBlock = ciphertextFile.read(blockSize)
-
-    if ciphertextBlock == '':
-        break
-
-    elif (algorithmCtr%3 == 0):
-        # update size to be read
-        blockSize = 8
-
-        # generate random key 
-        key =  b64decode(keysFile.readline().replace(b'\r\n', b'')) # key size = 16 bytes
-
-        # implement AES
-        cipher = AES.new(key, AES.MODE_ECB)
-
-        # decrypt and write to file
-        plaintext = cipher.decrypt(ciphertextBlock)
-
-        # check if unpadding is needed
-        try:
-            unpaddedText = unpad(plaintext, 16)
+        if ciphertextBlock == '':
             break
-        except ValueError:
-            unpaddedText = plaintext
 
-    elif (algorithmCtr%3 == 1):
-        # update size to be read
-        blockSize = 8
+        elif (algorithmCtr%3 == 0):
+            # update size to be read
+            blockSize = 8
 
-        # generate random key 
-        key =  b64decode(keysFile.readline().replace(b'\r\n', b'')) # key size = 8 bytes
+            # generate random key 
+            key =  b64decode(keysFile.readline().replace(b'\r\n', b'')) # key size = 16 bytes
 
-        # implement DES
-        cipher = DES.new(key, DES.MODE_ECB)
+            # implement AES
+            cipher = AES.new(key, AES.MODE_ECB)
 
-        # decrypt and write to file
-        plaintext = cipher.decrypt(ciphertextBlock)
+            # decrypt and write to file
+            plaintext = cipher.decrypt(ciphertextBlock)
 
-        # check if unpadding is needed
-        try:
-            unpaddedText = unpad(plaintext, 8)
-            break
-        except ValueError:
-            unpaddedText = plaintext
+            # check if unpadding is needed
+            try:
+                unpaddedText = unpad(plaintext, 16)
+                break
+            except ValueError:
+                unpaddedText = plaintext
 
-    else :  
-        # update size to be read
-        blockSize = 16
+        elif (algorithmCtr%3 == 1):
+            # update size to be read
+            blockSize = 8
 
-        # generate random key 
-        key =  b64decode(keysFile.readline().replace(b'\r\n', b'')) # key size = 8 bytes
+            # generate random key 
+            key =  b64decode(keysFile.readline().replace(b'\r\n', b'')) # key size = 8 bytes
 
-        # implement blowfish
-        cipher = Blowfish.new(key, Blowfish.MODE_ECB)
+            # implement DES
+            cipher = DES.new(key, DES.MODE_ECB)
 
-        # decrypt and write to file
-        plaintext = cipher.decrypt(ciphertextBlock)
+            # decrypt and write to file
+            plaintext = cipher.decrypt(ciphertextBlock)
 
-        # check if unpadding is needed
-        try:
-            unpaddedText = unpad(plaintext, 8)
-            break
-        except ValueError:
-            unpaddedText = plaintext
-    
+            # check if unpadding is needed
+            try:
+                unpaddedText = unpad(plaintext, 8)
+                break
+            except ValueError:
+                unpaddedText = plaintext
+
+        else :  
+            # update size to be read
+            blockSize = 16
+
+            # generate random key 
+            key =  b64decode(keysFile.readline().replace(b'\r\n', b'')) # key size = 8 bytes
+
+            # implement blowfish
+            cipher = Blowfish.new(key, Blowfish.MODE_ECB)
+
+            # decrypt and write to file
+            plaintext = cipher.decrypt(ciphertextBlock)
+
+            # check if unpadding is needed
+            try:
+                unpaddedText = unpad(plaintext, 8)
+                break
+            except ValueError:
+                unpaddedText = plaintext
+        
 
 
-    p = (unpaddedText).decode('UTF-8')
-    plaintextFile.write(p)
+        p = (unpaddedText).decode('UTF-8')
+        plaintextFile.write(p)
 
-    # increment to next algorithm
-    algorithmCtr+= 1
+        # increment to next algorithm
+        algorithmCtr+= 1
 
 
-plaintextFile.close()
-keysFile.close()
-ciphertextFile.close()
+    plaintextFile.close()
+    keysFile.close()
+    ciphertextFile.close()
