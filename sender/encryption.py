@@ -4,6 +4,7 @@ from Crypto.Cipher import Blowfish
 from Crypto.Random import get_random_bytes
 from Crypto.Util.Padding import pad
 from base64 import b64encode
+from sys import getsizeof
 
 # from Crypto.Cipher import 
 
@@ -22,23 +23,32 @@ def encryption (ptext):
     blockSize = 16
     algorithmCtr = 0
 
+    #generate random keys for the 3 algorithms: 16bytes, 8bytes, & 8bytes respectively
+    keyAES = get_random_bytes(16) # key size = 16 bytes
+    keyDES = get_random_bytes(8) # key size = 8 bytes
+    keyBlowFish = get_random_bytes(8) # key size = 8 bytes
+
+    # write key to file
+    #keysFile.write(key) # or key.decode("cp437")
+    keysFile.write(b64encode(keyAES).decode("UTF-8")+'\n')
+    keysFile.write(b64encode(keyDES).decode("UTF-8")+'\n')
+    keysFile.write(b64encode(keyBlowFish).decode("UTF-8")+'\n')
+
+
     while True:
         # generate plaintext
         plaintextBlock = plaintextFile.read(blockSize)
         plaintext = b''
 
-        if plaintextBlock == '':
+        if len(plaintextBlock) == 0:
             break
 
         elif (algorithmCtr%3 == 0):
             # update size to be read
             blockSize = 8
 
-            # generate random key 
-            key = get_random_bytes(16) # key size = 16 bytes
-
             # implement AES
-            cipher = AES.new(key, AES.MODE_ECB)
+            cipher = AES.new(keyAES, AES.MODE_ECB)
 
             # check if padding is needed
             if len(plaintextBlock) < 16 :
@@ -51,9 +61,9 @@ def encryption (ptext):
             blockSize = 8
 
             # generate random key 
-            key = get_random_bytes(8) # key size = 8 bytes
+            #key = get_random_bytes(8) # key size = 8 bytes
             # implement DES
-            cipher = DES.new(key, DES.MODE_ECB)
+            cipher = DES.new(keyDES, DES.MODE_ECB)
 
             # check if padding is needed
             if len(plaintextBlock) < 8 :
@@ -66,11 +76,11 @@ def encryption (ptext):
             blockSize = 16 
 
             # generate random key 
-            key = get_random_bytes(8) # key size = 8 bytes
+            #key = get_random_bytes(8) # key size = 8 bytes
 
 
             # implement blowfish
-            cipher = Blowfish.new(key, Blowfish.MODE_ECB)
+            cipher = Blowfish.new(keyBlowFish, Blowfish.MODE_ECB)
 
             # check if padding is needed
             if len(plaintextBlock) < 8 :
@@ -79,10 +89,6 @@ def encryption (ptext):
                 plaintext = plaintextBlock.encode('UTF-8')
 
 
-        
-        # write key to file
-        #keysFile.write(key) # or key.decode("cp437")
-        keysFile.write(b64encode(key).decode("UTF-8")+'\n')
         # encrypt and write to file
         ciphertext = cipher.encrypt(plaintext)
         ciphertextFile.write(ciphertext)

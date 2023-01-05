@@ -11,25 +11,27 @@ def decryption(ctext):
     keysFile = open("receiver/decryptedKeys.txt", "rb+")
     ciphertextFile = open("ciphertext.txt", "rb")
 
+    keyAES =  b64decode(keysFile.readline().replace(b'\r\n', b''))
+    keyDES =  b64decode(keysFile.readline().replace(b'\r\n', b''))
+    keyBlowFish =  b64decode(keysFile.readline().replace(b'\r\n', b''))
+
     blockSize = 16
     algorithmCtr = 0
 
     while True:
         # generate ciphertext
         ciphertextBlock = ciphertextFile.read(blockSize)
+        #keys = b64decode(keysFile.readline().replace(b'\r\n', b''))
 
-        if ciphertextBlock == '':
+        if len(ciphertextBlock) == 0:
             break
 
         elif (algorithmCtr%3 == 0):
             # update size to be read
             blockSize = 8
 
-            # generate random key 
-            key =  b64decode(keysFile.readline().replace(b'\r\n', b'')) # key size = 16 bytes
-
             # implement AES
-            cipher = AES.new(key, AES.MODE_ECB)
+            cipher = AES.new(keyAES, AES.MODE_ECB)
 
             # decrypt and write to file
             plaintext = cipher.decrypt(ciphertextBlock)
@@ -44,12 +46,9 @@ def decryption(ctext):
         elif (algorithmCtr%3 == 1):
             # update size to be read
             blockSize = 8
-
-            # generate random key 
-            key =  b64decode(keysFile.readline().replace(b'\r\n', b'')) # key size = 8 bytes
-
+            
             # implement DES
-            cipher = DES.new(key, DES.MODE_ECB)
+            cipher = DES.new(keyDES, DES.MODE_ECB)
 
             # decrypt and write to file
             plaintext = cipher.decrypt(ciphertextBlock)
@@ -65,11 +64,8 @@ def decryption(ctext):
             # update size to be read
             blockSize = 16
 
-            # generate random key 
-            key =  b64decode(keysFile.readline().replace(b'\r\n', b'')) # key size = 8 bytes
-
             # implement blowfish
-            cipher = Blowfish.new(key, Blowfish.MODE_ECB)
+            cipher = Blowfish.new(keyBlowFish, Blowfish.MODE_ECB)
 
             # decrypt and write to file
             plaintext = cipher.decrypt(ciphertextBlock)
