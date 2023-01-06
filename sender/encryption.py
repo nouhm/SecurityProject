@@ -11,11 +11,9 @@ from sys import getsizeof
 # open all files
 
 def encryption (ptext):
-
     #plaintextFile = open("sender/plaintext.txt", "r")
     keysFile = open("sender/keys.txt", "w")
     ciphertextFile = open("ciphertext.txt", "wb")
-
     plaintextFile = open(ptext, "r")
     #keysFile = open(keys, "w")
     #ciphertextFile = open(ctext, "wb")
@@ -48,13 +46,13 @@ def encryption (ptext):
             blockSize = 8
 
             # implement AES
-            cipher = AES.new(keyAES, AES.MODE_ECB)
-
+            cipher = AES.new(keyAES, AES.MODE_EAX)
+            plaintext = plaintextBlock
             # check if padding is needed
-            if len(plaintextBlock) < 16 :
-                plaintext = pad(plaintextBlock.encode('UTF-8'), 16)
-            else :
-                plaintext = plaintextBlock.encode('UTF-8')
+            # if len(plaintextBlock) < 16 :
+            #     plaintext = pad(plaintextBlock.encode('UTF-8'), 16)
+            # else :
+            #     plaintext = plaintextBlock.encode('UTF-8')
 
         elif (algorithmCtr%3 == 1):
             # update size to be read
@@ -63,13 +61,14 @@ def encryption (ptext):
             # generate random key 
             #key = get_random_bytes(8) # key size = 8 bytes
             # implement DES
-            cipher = DES.new(keyDES, DES.MODE_ECB)
+            cipher = DES.new(keyDES, DES.MODE_EAX)
+            plaintext = plaintextBlock
 
             # check if padding is needed
-            if len(plaintextBlock) < 8 :
-                plaintext = pad(plaintextBlock.encode('UTF-8'), 8)
-            else :
-                plaintext = plaintextBlock.encode('UTF-8')
+            # if len(plaintextBlock) < 8 :
+            #     plaintext = pad(plaintextBlock.encode('UTF-8'), 8)
+            # else :
+            #     plaintext = plaintextBlock.encode('UTF-8')
 
         else :  
             # update size to be read
@@ -80,18 +79,19 @@ def encryption (ptext):
 
 
             # implement blowfish
-            cipher = Blowfish.new(keyBlowFish, Blowfish.MODE_ECB)
+            cipher = Blowfish.new(keyBlowFish, Blowfish.MODE_EAX)
+            plaintext = plaintextBlock
 
             # check if padding is needed
-            if len(plaintextBlock) < 8 :
-                plaintext = pad(plaintextBlock.encode('UTF-8'), 8)
-            else :
-                plaintext = plaintextBlock.encode('UTF-8')
+            # if len(plaintextBlock) < 8 :
+            #     plaintext = pad(plaintextBlock.encode('UTF-8'), 8)
+            # else :
+            #     plaintext = plaintextBlock.encode('UTF-8')
 
 
         # encrypt and write to file
-        ciphertext = cipher.encrypt(plaintext)
-        ciphertextFile.write(ciphertext)
+        ciphertext = cipher.encrypt(plaintext.encode('utf-8'))
+        [ciphertextFile.write(x) for x in (cipher.nonce, ciphertext)]
 
         # increment to next algorithm
         algorithmCtr+= 1
