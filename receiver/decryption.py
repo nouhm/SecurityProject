@@ -3,7 +3,6 @@ from Crypto.Cipher import DES
 from Crypto.Cipher import Blowfish
 from Crypto.Util.Padding import unpad
 from base64 import b64decode
-import codecs
 
 # from Crypto.Cipher import 
 def decryption(ctext):
@@ -21,7 +20,7 @@ def decryption(ctext):
 
     while True:
         # generate ciphertext
-        nonce, ciphertextBlock = [ciphertextFile.read(x) for x in (blockSize, -1)]
+        ciphertextBlock = ciphertextFile.read(blockSize)
         #keys = b64decode(keysFile.readline().replace(b'\r\n', b''))
 
         if len(ciphertextBlock) == 0:
@@ -32,57 +31,56 @@ def decryption(ctext):
             blockSize = 8
 
             # implement AES
-            cipher = AES.new(keyAES, AES.MODE_EAX, nonce)
+            cipher = AES.new(keyAES, AES.MODE_ECB)
 
             # decrypt and write to file
             plaintext = cipher.decrypt(ciphertextBlock)
 
             # check if unpadding is needed
-            # try:
-            #     unpaddedText = unpad(plaintext, 16)
-            #     break
-            # except ValueError:
-            #     unpaddedText = plaintext
+            try:
+                unpaddedText = unpad(plaintext, 16)
+                #break
+            except ValueError:
+                unpaddedText = plaintext
 
         elif (algorithmCtr%3 == 1):
             # update size to be read
             blockSize = 8
             
             # implement DES
-            cipher = DES.new(keyDES, DES.MODE_EAX, nonce)
+            cipher = DES.new(keyDES, DES.MODE_ECB)
 
             # decrypt and write to file
             plaintext = cipher.decrypt(ciphertextBlock)
 
             # check if unpadding is needed
-            # try:
-            #     unpaddedText = unpad(plaintext, 8)
-            #     break
-            # except ValueError:
-            #     unpaddedText = plaintext
+            try:
+                unpaddedText = unpad(plaintext, 8)
+                #break
+            except ValueError:
+                unpaddedText = plaintext
 
         else :  
             # update size to be read
             blockSize = 16
 
             # implement blowfish
-            cipher = Blowfish.new(keyBlowFish, Blowfish.MODE_EAX, nonce)
+            cipher = Blowfish.new(keyBlowFish, Blowfish.MODE_ECB)
 
             # decrypt and write to file
             plaintext = cipher.decrypt(ciphertextBlock)
 
             # check if unpadding is needed
-            # try:
-            #     unpaddedText = unpad(plaintext, 8)
-            #     break
-            # except ValueError:
-            #     unpaddedText = plaintext
+            try:
+                unpaddedText = unpad(plaintext, 8)
+                #break
+            except ValueError:
+                unpaddedText = plaintext
         
 
 
-        p = (plaintext)
-        print(p)  
-        plaintextFile.write(plaintext.decode())
+        p = (unpaddedText).decode('UTF-8')
+        plaintextFile.write(p)
 
         # increment to next algorithm
         algorithmCtr+= 1

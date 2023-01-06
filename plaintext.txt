@@ -1,5 +1,17 @@
-Question 2) Why do we need to assign an internal IP address (i.e., behind NAT) for Metasploitable2-Linux? What will happen if we assign a public IP to it?
-Because there are not enough public addresses in IP version 4 to give every possible Internet connected device a unique address. This is why IP version 6 uses more bits for the address range and has more addresses.
-Private address blocks are not supposed to be routable over the public Internet (this is what makes them "private"). Since there are only 3 private blocks with a relatively small number of addresses within them, they are guaranteed to be reused by anyone and everyone who has a private network (private addresses ONLY need to be unique within a private network, but another private network might reuse the same addresses). So, you cannot just put the private address blocks "out there" - they will conflict with someone else who is using the same block elsewhere.
-So, this is why NAT is needed.
-To directly answer your last statement, if you have enough public addresses available to you, then you don't need NAT to send and receive traffic. NAT isn't necessary for this reason if you aren't trying to "save" IP addresses. For completeness, I'll say this: some people rely on the following side effects of NAT for security reasons and that could be a reason to elect to use it even if you do have enough public IP addresses
+Lorem ipsum dolor sit amet. Sed aliquid rerum nam consequatur autem qui pariatur repellendus ut iure modi sed consequatur perferendis. Est quas voluptatem At quae quaerat At deleniti doloremque ut voluptatem perferendis est incidunt sapiente id veniam dolores aut similique Quis.
+
+Qui debitis corporis in minima ipsam qui iusto laboriosam sit explicabo voluptates sed pariatur impedit est quasi cumque. Et illum quasi sit maiores magnam ad asperiores corporis sed dicta nihil ut assumenda cumque. Est esse modi ut doloribus saepe sit odit optio est ipsam maiores. Et recusandae internos ab aperiam odio aut dolores alias rem provident temporibus ut doloribus aspernatur eos doloribus aspernatur et autem eaque.
+
+Eos officia quibusdam in harum aliquam qui minima vero. In magni nihil ut cupiditate fugit et nisi necessitatibus et unde dolore. At fuga accusantium id enim veritatis non perspiciatis quos aut esse voluptatem qui blanditiis quam hic doloremque quis.
+
+Lorem ipsum dolor sit amet. Sed aliquid rerum nam consequatur autem qui pariatur repellendus ut iure modi sed consequatur perferendis. Est quas voluptatem At quae quaerat At deleniti doloremque ut voluptatem perferendis est incidunt sapiente id veniam dolores aut similique Quis.
+
+Qui debitis corporis in minima ipsam qui iusto laboriosam sit explicabo voluptates sed pariatur impedit est quasi cumque. Et illum quasi sit maiores magnam ad asperiores corporis sed dicta nihil ut assumenda cumque. Est esse modi ut doloribus saepe sit odit optio est ipsam maiores. Et recusandae internos ab aperiam odio aut dolores alias rem provident temporibus ut doloribus aspernatur eos doloribus aspernatur et autem eaque.
+
+Eos officia quibusdam in harum aliquam qui minima vero. In magni nihil ut cupiditate fugit et nisi necessitatibus et unde dolore. At fuga accusantium id enim veritatis non perspiciatis quos aut esse voluptatem qui blanditiis quam hic doloremque quis.
+
+Lorem ipsum dolor sit amet. Sed aliquid rerum nam consequatur autem qui pariatur repellendus ut iure modi sed consequatur perferendis. Est quas voluptatem At quae quaerat At deleniti doloremque ut voluptatem perferendis est incidunt sapiente id veniam dolores aut similique Quis.
+
+Qui debitis corporis in minima ipsam qui iusto laboriosam sit explicabo voluptates sed pariatur impedit est quasi cumque. Et illum quasi sit maiores magnam ad asperiores corporis sed dicta nihil ut assumenda cumque. Est esse modi ut doloribus saepe sit odit optio est ipsam maiores. Et recusandae internos ab aperiam odio aut dolores alias rem provident temporibus ut doloribus aspernatur eos doloribus aspernatur et autem eaque.
+
+Eos officia quibusdam in harum aliquam qui minima vero. In magni nihil ut cupiditate fugit et nisi necessitatibus et unde dolore. At fuga accusantium id enim veritatis non perspiciatis quos aut esse voluptatem qui blanditiis quam hic doloremque quis.
